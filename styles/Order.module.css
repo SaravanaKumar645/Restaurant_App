@@ -1,0 +1,6 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 9ch;
+  margin-top: 20px;
+}

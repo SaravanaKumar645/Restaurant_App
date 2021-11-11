@@ -1,0 +1,83 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4ch;
+  align-items: center;
+  background-color: rgba(0, 128, 255, 0.74);
+}
+.container h1 {
+  color: white;
+  font-size: 3rem;
+}
+.container p {
+  font-size: 13pt;
+}
+.container p span {
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+.container p span:hover {
+  text-shadow: 0 0 7px rgba(255, 255, 255, 0.9);
+  background: none;
+}
+.container .loginForm {
+  height: max-content;
+  padding: 40px;
+  width: 600px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  flex-direction: column;
+  gap: 4ch;
+  flex-wrap: wrap;
+  color: white;
+  box-shadow: 0 0 12px rgba(180, 220, 247, 0.918);
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  border-top: 4px solid rgba(255, 255, 255, 0.5);
+  border-left: 4px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(30px);
+}
+.container .loginForm input {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  color: black;
+  font-size: 12pt;
+  outline: none;
+  width: 300px;
+  background-color: white;
+}
+.container .loginForm input:focus,
+.container.loginForm input:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+  border: none;
+}
+.container .loginForm button {
+  padding: 10px;
+  border: none;
+  color: white;
+  background-color: black;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  height: 40px;
+  font-size: 12pt;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.1s ease-in;
+}
+.container .loginForm button:hover {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.91);
+  border: 3px solid rgba(255, 255, 255, 0.1);
+
+  background: rgba(255, 255, 255, 1);
+  color: black;
+}

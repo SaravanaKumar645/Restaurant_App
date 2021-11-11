@@ -1,0 +1,71 @@
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* padding: 20px 50px 20px 80px; */
+  background-color: #1f70db;
+  height: 70px;
+  width: 100%;
+  flex-wrap: wrap;
+  box-shadow: 4px 4px 10px rgb(65, 62, 62);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom: 2px solid rgb(7, 84, 199);
+}
+
+.header ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4ch;
+  list-style-type: none;
+}
+.header ul li {
+  min-width: 20px;
+  border-radius: 4px;
+  font-size: 11pt;
+  padding: 0 10px 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header ul li .navTab {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color: white;
+  opacity: 0.8;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+.header ul li .navTab:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.2);
+}
+.header ul li .navTabFocused {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 0 10px white;
+}
+.header ul li .navTabFocused:hover {
+  opacity: 0.9;
+}

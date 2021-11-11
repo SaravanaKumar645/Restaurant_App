@@ -1,0 +1,43 @@
+.container {
+  height: 100vh;
+  display: flex;
+  padding-top: 100px;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(6, 116, 226);
+}
+.container h1 {
+  color: white;
+  font-size: 4.5rem;
+}
+.container p {
+  color: white;
+  margin-top: 30px;
+  font-size: 20pt;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.7);
+}
+.container .navigationButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 3ch;
+  align-items: center;
+  margin-top: 90px;
+  justify-content: center;
+}
+.container .navigationButtons button {
+  border-radius: 6px;
+  color: black;
+  border: none;
+  background-color: white;
+  padding: 9px 0 9px 0;
+  cursor: pointer;
+  font-size: 13pt;
+  font-weight: bold;
+  width: 250px;
+}
+.container .navigationButtons button:hover {
+  color: rgb(25, 139, 253);
+  background-color: rgb(56, 52, 52);
+  box-shadow: 1px 1px 10px black;
+}
