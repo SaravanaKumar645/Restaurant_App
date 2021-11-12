@@ -15,6 +15,12 @@ const Notifications = {
       toastId: "error",
     });
   },
+  notifyWarning: (message) => {
+    console.log(message);
+    toast.warning(message, {
+      toastId: "warning",
+    });
+  },
   notifyLoading: () => {
     console.log("Conversion in progress ...");
     return toast.loading("Conversion in progress ...", {
