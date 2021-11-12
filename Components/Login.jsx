@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios({
-      url: "http://localhost:4000/api/login-user",
+      url: "https://restaurant-web-server.herokuapp.com/api/login-user",
       method: "POST",
       data: { email: email, password: password },
     })
