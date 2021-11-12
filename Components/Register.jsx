@@ -13,7 +13,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios({
-      url: "https://restaurant-web-server.herokuapp.com/register-user",
+      url: "https://restaurant-web-server.herokuapp.com/api/register-user",
       method: "POST",
       data: { name: name, email: email, password: password, mobile: mobile },
     })
