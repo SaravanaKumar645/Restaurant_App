@@ -6,7 +6,7 @@ import Login from "../Components/Login";
 const Login_user = () => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      router.replace("/homepage/menu-items");
+      router.replace("/homepage/menu_items");
     }
   }, []);
   return (
