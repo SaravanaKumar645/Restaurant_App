@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartArrowDown, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import Notifications from "../Notifications";
 import { toast, ToastContainer } from "react-toastify";
+import isAuthenticated from "../../Authentication/authCheck";
 
 const fetchData = async () =>
   await axios
@@ -27,21 +28,11 @@ const Menu = () => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(async () => {
+    const user = await isAuthenticated();
     const data = await fetchData();
-    if (data) {
-      const menuDetails = data.menus.menuDetails;
-      setMenuItems(menuDetails);
-      console.log(menuDetails);
-    }
-
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      console.log("My Token : " + token);
-      const user = jwt.decode(token);
-      console.log("Current User : \n");
-      console.log(user);
-      setCurrentUser(user);
-    }
+    setMenuItems(data.menus.menuDetails);
+    console.log(data);
+    setCurrentUser(user);
   }, []);
 
   // *For Tooltip
