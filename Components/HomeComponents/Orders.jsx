@@ -1,21 +1,40 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/Order.module.css";
-const jwt = require("jsonwebtoken");
 import { Tooltip, tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartArrowDown, faCartPlus } from "@fortawesome/free-solid-svg-icons";
+import { faStoreSlash, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import Notifications from "../Notifications";
+import { toast, ToastContainer } from "react-toastify";
+import isAuthenticated from "../../Authentication/authCheck";
+
+const fetchUserOrder = async (email) =>
+  await axios
+    .post(
+      `https://restaurant-web-server.herokuapp.com/api/get-user-orders/${email}`
+    )
+    .then((res) => ({
+      error: false,
+      orders: res.data,
+    }))
+    .catch(() => ({
+      error: true,
+      orders: null,
+    }));
 
 const Orders = () => {
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      console.log("My Token : " + token);
-      const user = jwt.decode(token);
-      console.log("Current User : " + user);
-      setCurrentUser(user);
-    }
+  const [currentUser, setCurrentUser] = useState({});
+  const [orderItems, setOrderItems] = useState([]);
+
+  useEffect(async () => {
+    const user = await isAuthenticated();
+    const data = await fetchUserOrder(user.email);
+    setOrderItems(data.orders.orderDetails);
+    console.log(data);
+    setCurrentUser(user);
   }, []);
+
   // *For Tooltip
   const BootstrapTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -30,58 +49,151 @@ const Orders = () => {
       textAlign: "center",
     },
   }));
-  const [currentUser, setCurrentUser] = useState({});
+
+  // *For ApI Calls
+  const handleCancelOrder = (e, value, index) => {
+    axios({
+      url: `https://restaurant-web-server.herokuapp.com/api/cancel-orders/${value._id}/${value.email}`,
+      method: "POST",
+    })
+      .then((result) => {
+        if (result.status === 200) {
+          var updatedOrder = [...orderItems];
+          updatedOrder.splice(index, 1, result.data.orderDetails);
+          setOrderItems(updatedOrder);
+          console.log(result.data);
+          Notifications.notifySuccess(result.data.msg);
+        } else if (result.status === 408) {
+          Notifications.notifyError(result.data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        Notifications.notifyError("Something went wrong !\n" + err);
+      });
+  };
+
+  const handleDeleteOrder = (e, value, index) => {
+    axios({
+      url: `https://restaurant-web-server.herokuapp.com/api/delete-orders/${value._id}/${value.email}`,
+      method: "POST",
+    })
+      .then((result) => {
+        if (result.status === 200) {
+          var updatedOrder = [...orderItems];
+          updatedOrder.splice(index, 1);
+          setOrderItems(updatedOrder);
+          console.log(result.data);
+          Notifications.notifySuccess(result.data.msg);
+        } else if (result.status === 408) {
+          Notifications.notifyError(result.data.msg);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        Notifications.notifyError("Something went wrong !\n" + err);
+      });
+  };
   return (
     <div className={styles.container}>
+      <ToastContainer theme="colored" autoClose={5000} position="top-right" />
       <div className={styles.header}>
         <h2>Hello&ensp;{currentUser.name} !</h2>
         <p>Your Orders &ensp;!</p>
       </div>
       <div className={styles.items}>
         <ul>
-          <li key={1}>
-            <div className={styles.p_img}>
-              <img src="https://img.icons8.com/external-becris-lineal-becris/64/000000/external-user-mintab-for-ios-becris-lineal-becris.png"></img>
-            </div>
-            <div className={styles.p_details}>
-              <h3>Product Name</h3>
-              <p className={styles.p_desc}>
-                Here u will enter ur product description and they can be maximum
-                200 characters and this ffor checking .
-              </p>
-              <strong>
-                Stock : <span>20</span>
-              </strong>
-              <div className={styles.PriceandQuantityWrapper}>
-                <h4>Rs. 224</h4>
-                <input
-                  placeholder="Select Quantity"
-                  aria-valuemax="9"
-                  aria-valuemin="0"
-                  type="number"
-                  min={0}
-                  max={9}
-                ></input>
-              </div>
-            </div>
-            <div className={styles.iconButtons}>
-              <BootstrapTooltip title="Add to Cart">
-                <a onClick={() => alert("clicked")}>
-                  {/* <i className="fas fa-cart-plus"></i>{" "} */}
-                  <FontAwesomeIcon icon={faCartPlus} className={styles.i} />
-                </a>
-              </BootstrapTooltip>
-              <BootstrapTooltip title="Order Now">
-                <a onClick={() => alert("clicked")}>
-                  {/* <i className="fas fa-cart-arrow-down"></i>{" "} */}
-                  <FontAwesomeIcon
-                    icon={faCartArrowDown}
-                    className={styles.i}
-                  />
-                </a>
-              </BootstrapTooltip>
-            </div>
-          </li>
+          {orderItems.length > 0 &&
+            orderItems.map((value, index) => {
+              return (
+                <li key={index}>
+                  <div className={styles.p_img}>
+                    <img
+                      className={styles.img}
+                      src={value.item_details.item_pic}
+                    />
+                  </div>
+                  <div className={styles.p_details}>
+                    <h3>{value.item_name}</h3>
+                    <p className={styles.p_desc}>
+                      {value.item_details.item_description}
+                    </p>
+                    <strong>
+                      Total.Qty : <span>{value.quantity}</span>
+                    </strong>
+                    <div className={styles.PriceandQuantityWrapper}>
+                      <h4>
+                        Rs.{" "}
+                        {Number(value.item_details.item_price) * value.quantity}
+                      </h4>
+                      <p className={styles.deliveryStatus}>
+                        Status :{" "}
+                        <span
+                          className={
+                            value.delivery_status === "pending"
+                              ? styles["status_pending"]
+                              : value.delivery_status === "cancelled"
+                              ? styles["status_cancelled"]
+                              : styles["status_delivered"]
+                          }
+                        >
+                          {value.delivery_status}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className={styles.iconButtons}>
+                    <BootstrapTooltip title="Cancel Order ">
+                      <a>
+                        <FontAwesomeIcon
+                          icon={faStoreSlash}
+                          className={
+                            value.delivery_status === "cancelled" ||
+                            value.delivery_status === "delivered"
+                              ? styles["iDisabled"]
+                              : styles["i"]
+                          }
+                          onClick={(e) => {
+                            if (
+                              value.delivery_status.includes([
+                                "cancelled" || "delivered",
+                              ])
+                            ) {
+                              Notifications.notifyError(
+                                "Cannot cancel the item as it has already Delivered or Cancelled !"
+                              );
+                            } else {
+                              handleCancelOrder(e, value, index);
+                            }
+                          }}
+                        />
+                      </a>
+                    </BootstrapTooltip>
+                    <BootstrapTooltip title="Remove from list ">
+                      <a>
+                        <FontAwesomeIcon
+                          icon={faTrashAlt}
+                          className={
+                            value.delivery_status === "pending"
+                              ? styles["iDeleteDisabled"]
+                              : styles["iDelete"]
+                          }
+                          onClick={(e) => {
+                            if (value.delivery_status === "pending") {
+                              return Notifications.notifyError(
+                                "You cannot remove the item with status = PENDING !"
+                              );
+                            } else {
+                              handleDeleteOrder(e, value, index);
+                            }
+                          }}
+                        />
+                      </a>
+                    </BootstrapTooltip>
+                  </div>
+                </li>
+              );
+            })}
         </ul>
       </div>
     </div>

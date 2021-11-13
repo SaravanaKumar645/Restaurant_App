@@ -42,7 +42,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgb(253, 215, 144);
-  width: 550px;
+  width: 530px;
   cursor: pointer;
   border-radius: 7px;
 }
@@ -64,6 +64,7 @@
   flex-direction: column;
   margin-top: 4px;
   border-right: 1px solid rgb(230, 154, 14);
+  width: 300px;
 }
 .p_details h3 {
   border-bottom: 1px solid rgb(230, 154, 14);
@@ -92,16 +93,67 @@
 .PriceandQuantityWrapper {
   display: flex;
   margin-top: 10px;
-  justify-content: flex-start;
+  gap: 1ch;
   align-items: center;
-  gap: 9ch;
+  width: 260px;
 }
-.PriceandQuantityWrapper input {
+.PriceandQuantityWrapper .deliveryStatus {
+  font-weight: 500;
   outline: none;
   border: none;
   padding: 10px;
-  width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   border-radius: 7px;
+}
+.PriceandQuantityWrapper .deliveryStatus .status_pending {
+  color: white;
+  font-weight: bold;
+  font-size: 9pt;
+  font-variant-caps: all-petite-caps;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 7px rgb(22, 21, 22);
+  border: none;
+  background-color: rgb(71, 52, 196);
+  height: 20px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+}
+.PriceandQuantityWrapper .deliveryStatus .status_cancelled {
+  color: white;
+  font-weight: bold;
+  font-size: 9pt;
+  font-variant-caps: all-petite-caps;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 7px rgb(22, 21, 22);
+  border: none;
+  height: 20px;
+  width: 100px;
+  border-radius: 5px;
+  background-color: rgb(253, 10, 10);
+}
+.PriceandQuantityWrapper .deliveryStatus .status_delivered {
+  color: white;
+  font-weight: bold;
+  font-variant-caps: all-petite-caps;
+  font-size: 9pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 7px rgb(22, 21, 22);
+  border: none;
+  height: 20px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  background-color: rgb(3, 180, 3);
 }
 .PriceandQuantityWrapper h4 {
   color: green;
@@ -112,22 +164,57 @@
   padding-bottom: 5px;
   background-color: rgb(235, 255, 230);
 }
+
 .iconButtons {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   height: 150px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .iconButtons a .i {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24pt;
+  font-size: 25pt;
   padding: 4px;
+  border-radius: 5px;
+}
+.iconButtons a .iDisabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25pt;
+  padding: 4px;
+  cursor: not-allowed;
+  opacity: 0.2;
   border-radius: 5px;
 }
 .iconButtons a .i:hover {
   background-color: white;
   color: rgb(10, 112, 214);
+}
+.iconButtons a .iDelete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25pt;
+  padding: 4px;
+  border-radius: 5px;
+}
+.iconButtons a .iDeleteDisabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25pt;
+  cursor: not-allowed;
+  padding: 4px;
+  opacity: 0.2;
+  border-radius: 5px;
+}
+.iconButtons a .iDelete:hover {
+  background-color: white;
+  color: rgb(247, 36, 36);
 }

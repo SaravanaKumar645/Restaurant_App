@@ -2,18 +2,16 @@ import React, { useState, useEffect } from "react";
 import styles from "../../styles/Menu.module.css";
 const jwt = require("jsonwebtoken");
 import axios from "axios";
-import Image from "next/image";
 import { Tooltip, tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartArrowDown, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import Notifications from "../Notifications";
 import { toast, ToastContainer } from "react-toastify";
-import { compose } from "@mui/system";
 
 const fetchData = async () =>
   await axios
-    .get("http://localhost:4000/api/get-all-menus")
+    .get("https://restaurant-web-server.herokuapp.com/api/get-all-menus")
     .then((res) => ({
       error: false,
       menus: res.data,
@@ -23,7 +21,11 @@ const fetchData = async () =>
       menus: null,
     }));
 
-const Menu = ({ menus, error }) => {
+const Menu = () => {
+  const [currentUser, setCurrentUser] = useState({});
+  const [menuItems, setMenuItems] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+
   useEffect(async () => {
     const data = await fetchData();
     if (data) {
@@ -92,9 +94,9 @@ const Menu = ({ menus, error }) => {
     );
     console.log(orderQuantity);
     if (!orderQuantity > 0) {
-      return Notifications.notifyError("Quantity can't be empty !");
+      return Notifications.notifyError("Quantity can't be zero !");
     }
-    console.log("Still iniside handle order ");
+
     axios({
       url: "https://restaurant-web-server.herokuapp.com/api/create-orders",
       method: "POST",
@@ -114,9 +116,6 @@ const Menu = ({ menus, error }) => {
       });
   };
 
-  const [currentUser, setCurrentUser] = useState({});
-  const [menuItems, setMenuItems] = useState([{}]);
-  const [quantity, setQuantity] = useState(1);
   return (
     <div className={styles.container}>
       <ToastContainer theme="colored" autoClose={5000} position="top-right" />
