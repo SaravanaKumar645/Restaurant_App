@@ -1,7 +1,18 @@
 import Head from "next/head";
 import Login from "../Components/Login";
+import isProtected from "../Authentication/routeCheck";
+import router from "next/router";
+import { useEffect } from "react";
+import Notifications from "../Components/Notifications";
 
 const Login_user = () => {
+  useEffect(() => {
+    const redirect = isProtected();
+    if (redirect) {
+      Notifications.notifySuccess("Cached User details. Login success !");
+      router.replace("/homepage/menu_items");
+    }
+  }, []);
   return (
     <>
       <Login />

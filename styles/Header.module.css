@@ -16,7 +16,11 @@
   box-shadow: 4px 4px 10px rgb(65, 62, 62);
   border-bottom: 2px solid rgb(7, 84, 199);
 }
-
+.header h2 span {
+  cursor: pointer;
+  text-shadow: 0 0 7px rgba(255, 255, 255, 0.9);
+  color: whitesmoke;
+}
 .header ul {
   display: flex;
   flex-wrap: wrap;

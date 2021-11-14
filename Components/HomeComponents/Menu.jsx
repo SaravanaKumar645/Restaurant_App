@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/Menu.module.css";
-const jwt = require("jsonwebtoken");
 import axios from "axios";
 import { Tooltip, tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material/styles";

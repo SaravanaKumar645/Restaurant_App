@@ -3,7 +3,7 @@ import isAuthenticated from "../../Authentication/authCheck";
 import styles from "../../styles/Profile.module.css";
 
 const Profile = () => {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState([]);
   useEffect(async () => {
     const user = await isAuthenticated();
     console.log("Inside Profile Component !!!!!!!!!!");
@@ -26,22 +26,36 @@ const Profile = () => {
           <p>PERSONAL DETAILS</p>
         </div>
         <div className={styles.userDetails}>
-          <ul className={styles.singleField}>
+          <ul className={styles.ul}>
             <li>
-              <p>Name</p>
-              <p></p>
+              <p>
+                Name <span>&ndash;</span>
+              </p>
+              <h4>{currentUser.name}</h4>
             </li>
             <li>
-              <p>Email</p>
-              <p></p>
+              <p>
+                Email <span>&ndash;</span>
+              </p>
+              <h4>{currentUser.email}</h4>
             </li>
             <li>
-              <p>Phone Number</p>
-              <p></p>
+              <p>
+                Phone Number <span>&ndash;</span>
+              </p>
+              <h4>{currentUser.mobile}</h4>
             </li>
             <li>
-              <p>Session Expiry</p>
-              <p></p>
+              <p>
+                User ID <span>&ndash;</span>
+              </p>
+              <h4>{currentUser.id}</h4>
+            </li>
+            <li>
+              <p>
+                Login Session Expiry <span>&ndash;</span>
+              </p>
+              <h4>{new Date(currentUser.exp * 1000).toLocaleString()}</h4>
             </li>
           </ul>
         </div>

@@ -3,12 +3,12 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: 90.5vh;
   background-color: rgb(252, 242, 223);
 }
 .container .profileBox {
   height: max-content;
-  width: 600px;
+  width: 650px;
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -22,19 +22,59 @@
   background: rgba(255, 255, 255, 0.9);
   overflow: hidden;
   border: 2px solid gray;
+  padding-bottom: 50px;
 }
 .profileBox .title {
   display: flex;
   gap: 1ch;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
   background-color: #f4f4fb;
   text-align: left;
   padding: 13px;
   font-size: 11pt;
-  color: black;
-  fill: black;
+  color: rgb(71, 52, 196);
+  fill: rgb(71, 52, 196);
 }
 .profileBox .title svg {
   height: 18px;
   width: 18px;
+  font-weight: 700;
   cursor: pointer;
+}
+.profileBox .userDetails {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profileBox .userDetails ul {
+  display: flex;
+  flex-direction: column;
+  gap: 5ch;
+  list-style-type: none;
+}
+.profileBox .userDetails ul li {
+  display: flex;
+  gap: 3ch;
+  text-align: left;
+}
+.userDetails ul li p {
+  width: 200px;
+  color: #696d9a;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  word-wrap: break-word;
+}
+.userDetails ul li p span {
+  text-align: left;
+  font-weight: bold;
+}
+.userDetails ul li h4 {
+  width: 200px;
+  word-wrap: break-word;
+  display: flex;
+  flex-wrap: wrap;
 }

@@ -3,21 +3,35 @@ import styles from "../../styles/Header.module.css";
 import jwt from "jsonwebtoken";
 import Link from "next/link";
 import { useRouter } from "next/router";
-const Header = () => {
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      const token = localStorage.getItem("token");
-      console.log("My Token : " + token);
-      const user = jwt.decode(token);
-      console.log("Current User : " + user);
-      setCurrentUser(user);
-    }
-  }, []);
+import isAuthenticated from "../../Authentication/authCheck";
+import { Tooltip, tooltipClasses } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-  const [currentUser, setCurrentUser] = useState({});
+const Header = () => {
+  const [currentUser, setCurrentUser] = useState([]);
   const router = useRouter();
   const { asPath } = useRouter();
   const tabPath = asPath;
+
+  useEffect(async () => {
+    const user = await isAuthenticated();
+    setCurrentUser(user);
+  }, []);
+
+  // *For Tooltip
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+      fontSize: "10pt",
+      padding: "10px 15px 10px 15px",
+      textAlign: "center",
+    },
+  }));
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,7 +39,13 @@ const Header = () => {
   };
   return (
     <div className={styles.header}>
-      <h2>Welcome&ensp; {currentUser.name} !</h2>
+      <h2>
+        Welcome&ensp;{" "}
+        <BootstrapTooltip title={currentUser.email}>
+          <span>{currentUser.name} !</span>
+        </BootstrapTooltip>
+      </h2>
+
       <ul>
         <Link href="/homepage/menu_items">
           <li>
