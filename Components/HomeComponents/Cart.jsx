@@ -69,6 +69,10 @@ const Cart = () => {
     console.log(orderQuantity);
     if (!orderQuantity > 0) {
       return Notifications.notifyError("Quantity can't be zero !");
+    } else if (orderQuantity > value.item_stock - 3) {
+      return Notifications.notifyError(
+        "You have exceeded the maximum quantity !"
+      );
     } else {
       setLoading(true);
       axios({
