@@ -22,9 +22,27 @@
 .container .items {
   padding-top: 30px;
   display: flex;
-  min-height: 75vh;
   align-items: center;
   justify-content: center;
+}
+.container .items .noProductFound {
+  display: flex;
+  height: 300px;
+  width: 520px;
+  background-image: url("/cart-empty.jpeg");
+  background-repeat: no-repeat;
+  background-size: 390px;
+  background-position: center;
+  background-color: #f6f6f6;
+  transform: translateY(75px);
+}
+.noProductFound p {
+  position: relative;
+  top: 85%;
+  left: 25%;
+  font-size: 15pt;
+  font-weight: 700;
+  color: rgb(219, 159, 8);
 }
 .container .items ul {
   display: grid;
@@ -42,7 +60,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgb(253, 215, 144);
-  width: 530px;
+  width: 540px;
   cursor: pointer;
   border-radius: 7px;
 }
@@ -95,7 +113,7 @@
   margin-top: 10px;
   gap: 1ch;
   align-items: center;
-  width: 260px;
+  width: 295px;
 }
 .PriceandQuantityWrapper .deliveryStatus {
   font-weight: 500;

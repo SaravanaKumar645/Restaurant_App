@@ -9,6 +9,7 @@ import { faCartArrowDown, faCartPlus } from "@fortawesome/free-solid-svg-icons";
 import Notifications from "../Notifications";
 import { toast, ToastContainer } from "react-toastify";
 import isAuthenticated from "../../Authentication/authCheck";
+import Loader from "../Loader";
 
 const fetchData = async () =>
   await axios
@@ -26,13 +27,18 @@ const Menu = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [menuItems, setMenuItems] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => () => setLoading(false), []);
 
   useEffect(async () => {
+    setLoading(true);
     const user = await isAuthenticated();
     const data = await fetchData();
     setMenuItems(data.menus.menuDetails);
     console.log(data);
     setCurrentUser(user);
+    setLoading(false);
   }, []);
 
   // *For Tooltip
@@ -52,6 +58,7 @@ const Menu = () => {
 
   const handleCartAdd = (e, value) => {
     e.target.preventDefault;
+    setLoading(true);
     console.log(value);
     value["email"] = currentUser.email;
     axios({
@@ -62,15 +69,19 @@ const Menu = () => {
       .then((result) => {
         if (result.status === 200) {
           console.log(result.data);
+          setLoading(false);
           Notifications.notifySuccess(result.data.msg);
         } else if (result.status === 408) {
+          setLoading(false);
           Notifications.notifyError(result.data.msg);
         } else if (result.status === 202) {
+          setLoading(false);
           console.log(result.data);
           Notifications.notifyWarning(result.data.msg);
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
         Notifications.notifyError("Something went wrong !\n" + err);
       });
@@ -78,6 +89,7 @@ const Menu = () => {
 
   const handleOrderInitiate = (e, value, index) => {
     e.target.preventDefault;
+
     value["email"] = currentUser.email;
     console.log(value);
     const orderQuantity = Number(
@@ -86,30 +98,38 @@ const Menu = () => {
     console.log(orderQuantity);
     if (!orderQuantity > 0) {
       return Notifications.notifyError("Quantity can't be zero !");
-    }
-
-    axios({
-      url: "https://restaurant-web-server.herokuapp.com/api/create-orders",
-      method: "POST",
-      data: { orderedItem: value, quantity: orderQuantity },
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          console.log(result.data);
-          Notifications.notifySuccess(result.data.msg);
-        } else if (result.status === 408) {
-          Notifications.notifyError(result.data.msg);
-        }
+    } else {
+      setLoading(true);
+      axios({
+        url: "https://restaurant-web-server.herokuapp.com/api/create-orders",
+        method: "POST",
+        data: { orderedItem: value, quantity: orderQuantity },
       })
-      .catch((err) => {
-        console.log(err);
-        Notifications.notifyError("Something went wrong !\n" + err);
-      });
+        .then((result) => {
+          setLoading(false);
+          if (result.status === 200) {
+            console.log(result.data);
+            Notifications.notifySuccess(result.data.msg);
+          } else if (result.status === 408) {
+            Notifications.notifyError(result.data.msg);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+          Notifications.notifyError("Something went wrong !\n" + err);
+        });
+    }
   };
 
   return (
     <div className={styles.container}>
-      <ToastContainer theme="colored" autoClose={5000} position="top-right" />
+      <ToastContainer
+        style={{ zIndex: "9999" }}
+        theme="colored"
+        autoClose={5000}
+        position="top-right"
+      />
       <div className={styles.header}>
         <h2>Hello&ensp;{currentUser.name} !</h2>
         <p>Here is the menu for you Today &ensp;!</p>
@@ -170,7 +190,13 @@ const Menu = () => {
               );
             })}
         </ul>
+        {menuItems.length < 1 && (
+          <div className={styles.noProductFound}>
+            <p>Sorry no menu found ! !</p>
+          </div>
+        )}
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import axios from "axios";
 import Notifications from "../Notifications";
 import { toast, ToastContainer } from "react-toastify";
 import isAuthenticated from "../../Authentication/authCheck";
+import Loader from "../Loader";
 
 const fetchUserOrder = async (email) =>
   await axios
@@ -26,13 +27,18 @@ const fetchUserOrder = async (email) =>
 const Orders = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [orderItems, setOrderItems] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => () => setLoading(false), []);
 
   useEffect(async () => {
+    setLoading(true);
     const user = await isAuthenticated();
     const data = await fetchUserOrder(user.email);
     setOrderItems(data.orders.orderDetails);
     console.log(data);
     setCurrentUser(user);
+    setLoading(false);
   }, []);
 
   // *For Tooltip
@@ -52,11 +58,13 @@ const Orders = () => {
 
   // *For ApI Calls
   const handleCancelOrder = (e, value, index) => {
+    setLoading(true);
     axios({
       url: `https://restaurant-web-server.herokuapp.com/api/cancel-orders/${value._id}/${value.email}`,
       method: "POST",
     })
       .then((result) => {
+        setLoading(false);
         if (result.status === 200) {
           var updatedOrder = [...orderItems];
           updatedOrder.splice(index, 1, result.data.orderDetails);
@@ -68,35 +76,44 @@ const Orders = () => {
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
         Notifications.notifyError("Something went wrong !\n" + err);
       });
   };
 
   const handleDeleteOrder = (e, value, index) => {
+    setLoading(true);
     axios({
       url: `https://restaurant-web-server.herokuapp.com/api/delete-orders/${value._id}/${value.email}`,
       method: "POST",
     })
       .then((result) => {
+        setLoading(false);
         if (result.status === 200) {
           var updatedOrder = [...orderItems];
           updatedOrder.splice(index, 1);
           setOrderItems(updatedOrder);
           console.log(result.data);
-          Notifications.notifySuccess(result.data.msg);
+          Notifications.notifySuccess("Item has been deleted .");
         } else if (result.status === 408) {
           Notifications.notifyError(result.data.msg);
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
         Notifications.notifyError("Something went wrong !\n" + err);
       });
   };
   return (
     <div className={styles.container}>
-      <ToastContainer theme="colored" autoClose={5000} position="top-right" />
+      <ToastContainer
+        style={{ zIndex: "9999" }}
+        theme="colored"
+        autoClose={5000}
+        position="top-right"
+      />
       <div className={styles.header}>
         <h2>Hello&ensp;{currentUser.name} !</h2>
         <p>Your Orders &ensp;!</p>
@@ -195,7 +212,13 @@ const Orders = () => {
               );
             })}
         </ul>
+        {orderItems.length < 1 && (
+          <div className={styles.noProductFound}>
+            <p>You don&apos;t have any orders !</p>
+          </div>
+        )}
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };

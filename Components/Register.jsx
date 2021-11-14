@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Register.module.css";
 import axios from "axios";
 import router from "next/router";
 import { toast, ToastContainer } from "react-toastify";
 import Notifications from "./Notifications";
+import Loader from "./Loader";
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState();
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => () => setLoading(false), []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     axios({
       url: "https://restaurant-web-server.herokuapp.com/api/register-user",
       method: "POST",
@@ -25,11 +31,13 @@ const Register = () => {
           localStorage.setItem("token", result.data.accessToken);
           router.replace("/homepage/menu_items");
         } else if (result.status === 202) {
+          setLoading(false);
           console.log(result.data.msg);
           Notifications.notifyError(result.data.msg);
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
         Notifications.notifyError("Something went wrong .Try Again !");
       });
@@ -37,7 +45,12 @@ const Register = () => {
 
   return (
     <div className={styles.container}>
-      <ToastContainer theme="colored" autoClose={5000} position="top-right" />
+      <ToastContainer
+        style={{ zIndex: "9999" }}
+        theme="colored"
+        autoClose={5000}
+        position="top-right"
+      />
       <h1>Register your Account !</h1>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <input
@@ -80,6 +93,7 @@ const Register = () => {
         Already have an account ?&ensp;{" "}
         <span onClick={() => router.replace("/login_user")}>Login here !</span>
       </p>
+      {isLoading && <Loader />}
     </div>
   );
 };

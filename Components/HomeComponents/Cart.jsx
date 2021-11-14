@@ -9,6 +9,7 @@ import Notifications from "../Notifications";
 import { toast, ToastContainer } from "react-toastify";
 import isAuthenticated from "../../Authentication/authCheck";
 import dynamic from "next/dynamic";
+import Loader from "../Loader";
 
 const fetchUserCart = async (email) =>
   await axios
@@ -29,13 +30,18 @@ const DynamicComponent = dynamic(() => import("./RenderCartList"));
 const Cart = () => {
   const [currentUser, setCurrentUser] = useState({});
   const [cartItems, setCartItems] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => () => setLoading(false), []);
 
   useEffect(async () => {
+    setLoading(true);
     const user = await isAuthenticated();
     const data = await fetchUserCart(user.email);
     setCartItems(data.cart.cartDetails);
     console.log(data);
     setCurrentUser(user);
+    setLoading(false);
   }, []);
 
   // *For Tooltip
@@ -63,37 +69,41 @@ const Cart = () => {
     console.log(orderQuantity);
     if (!orderQuantity > 0) {
       return Notifications.notifyError("Quantity can't be zero !");
-    }
-
-    axios({
-      url: "https://restaurant-web-server.herokuapp.com/api/create-orders",
-      method: "POST",
-      data: { orderedItem: value, quantity: orderQuantity },
-    })
-      .then((result) => {
-        if (result.status === 200) {
-          console.log(result.data);
-          Notifications.notifySuccess(result.data.msg);
-        } else if (result.status === 408) {
-          Notifications.notifyError(result.data.msg);
-        }
+    } else {
+      setLoading(true);
+      axios({
+        url: "https://restaurant-web-server.herokuapp.com/api/create-orders",
+        method: "POST",
+        data: { orderedItem: value, quantity: orderQuantity },
       })
-      .catch((err) => {
-        console.log(err);
-        Notifications.notifyError("Something went wrong !\n" + err);
-      });
+        .then((result) => {
+          setLoading(false);
+          if (result.status === 200) {
+            console.log(result.data);
+            Notifications.notifySuccess(result.data.msg);
+          } else if (result.status === 408) {
+            Notifications.notifyError(result.data.msg);
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+          Notifications.notifyError("Something went wrong !\n" + err);
+        });
+    }
   };
 
   const handleRemoveItem = (e, value, index) => {
     e.target.preventDefault;
     console.log(value);
-
+    setLoading(true);
     axios({
       url: "https://restaurant-web-server.herokuapp.com/api/delete-cart-item",
       method: "POST",
       data: { id: value._id, email: value.email },
     })
       .then((result) => {
+        setLoading(false);
         if (result.status === 200) {
           var currentCart = [...cartItems];
           currentCart.splice(index, 1);
@@ -108,6 +118,7 @@ const Cart = () => {
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
         Notifications.notifyError("Something went wrong !\n" + err);
       });
@@ -115,7 +126,12 @@ const Cart = () => {
 
   return (
     <div className={styles.container}>
-      <ToastContainer theme="colored" autoClose={5000} position="top-right" />
+      <ToastContainer
+        style={{ zIndex: "9999" }}
+        theme="colored"
+        autoClose={5000}
+        position="top-right"
+      />
       <div className={styles.header}>
         <h2>Hello&ensp;{currentUser.name} !</h2>
         <p>Your Cart &ensp;!</p>
@@ -178,7 +194,13 @@ const Cart = () => {
               );
             })}
         </ul>
+        {cartItems.length < 1 && (
+          <div className={styles.noProductFound}>
+            <p>Currently your Cart is Empty !</p>
+          </div>
+        )}
       </div>
+      {isLoading && <Loader />}
     </div>
   );
 };

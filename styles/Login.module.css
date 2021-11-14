@@ -24,14 +24,6 @@
   background: none;
 }
 .container .loginForm {
-  /* height: fit-content;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid rgba(255, 255, 255, 0.5); */
-
   height: max-content;
   padding: 40px;
   width: 600px;
@@ -89,4 +81,66 @@
 
   background: rgba(255, 255, 255, 1);
   color: black;
+}
+
+/* *For Loader */
+.loader {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(24, 21, 21, 0.7);
+  z-index: 999;
+  display: flex;
+  backdrop-filter: blur(2px);
+}
+.loader h3 {
+  color: white;
+  font-size: 25pt;
+  position: absolute;
+  left: 44%;
+  top: 52%;
+  letter-spacing: 1px;
+}
+.loader::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 48%;
+  top: 40%;
+  width: 50px;
+  height: 50px;
+  border-style: solid;
+  border-color: #f3f3f3;
+  border-top-color: rgba(0, 128, 255, 0.74);
+  border-width: 10px;
+  border-radius: 50%;
+  -webkit-animation: spin 0.5s linear infinite;
+  animation: spin 0.5s linear infinite ease;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
 }
