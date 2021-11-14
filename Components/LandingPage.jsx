@@ -6,7 +6,7 @@ const LandingPage = () => {
   return (
     <div className={styles.container}>
       <h1>Restaurant Application</h1>
-      <p>Order your favorite recepies here !</p>
+      <p>Order your favorite recipies here !</p>
       <div className={styles.navigationButtons}>
         <button onClick={() => router.push("/login_user")}>Login</button>
         <button onClick={() => router.push("/register_user")}>Register</button>
