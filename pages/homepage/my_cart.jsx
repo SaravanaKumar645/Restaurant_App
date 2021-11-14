@@ -1,14 +1,8 @@
-import router from "next/router";
-import { useEffect } from "react";
 import Header from "../../Components/HomeComponents/Header";
 import Cart from "../../Components/HomeComponents/Cart";
 import Head from "next/head";
+import withAuth from "../../Authentication/protectedRoutes";
 const My_Cart = () => {
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.replace("/login_user");
-    }
-  }, []);
   return (
     <>
       <Header />
@@ -26,4 +20,4 @@ const My_Cart = () => {
   );
 };
 
-export default My_Cart;
+export default withAuth(My_Cart);

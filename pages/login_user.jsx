@@ -1,14 +1,7 @@
-import router from "next/router";
-import { useEffect } from "react";
 import Head from "next/head";
 import Login from "../Components/Login";
 
 const Login_user = () => {
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      router.replace("/homepage/menu_items");
-    }
-  }, []);
   return (
     <>
       <Login />

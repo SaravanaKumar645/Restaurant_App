@@ -1,14 +1,15 @@
-import Menu from "../../Components/HomeComponents/Menu";
 import Header from "../../Components/HomeComponents/Header";
 import Head from "next/head";
+import Profile from "../../Components/HomeComponents/Profile";
 import withAuth from "../../Authentication/protectedRoutes";
-const Menu_items = () => {
+
+const My_Profile = () => {
   return (
     <>
       <Header />
-      <Menu />
+      <Profile />
       <Head>
-        <title>Menu Items</title>
+        <title>My Profile</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <script
           src="https://kit.fontawesome.com/1794b9b2a9.js"
@@ -19,4 +20,4 @@ const Menu_items = () => {
   );
 };
 
-export default withAuth(Menu_items);
+export default withAuth(My_Profile);

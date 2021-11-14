@@ -66,6 +66,19 @@ const Header = () => {
             </a>
           </li>
         </Link>
+        <Link href="/homepage/user_profile">
+          <li>
+            <a
+              className={
+                tabPath === "/homepage/user_profile"
+                  ? styles["navTabFocused"]
+                  : styles["navTab"]
+              }
+            >
+              My Profile
+            </a>
+          </li>
+        </Link>
         <li>
           <a className={styles.navTab} onClick={handleLogout}>
             Logout

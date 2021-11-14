@@ -1,14 +1,7 @@
 import Register from "../Components/Register";
-import router from "next/router";
-import { useEffect } from "react";
 import Head from "next/head";
 
 const Register_user = () => {
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      router.replace("/homepage/menu_items");
-    }
-  }, []);
   return (
     <>
       <Register />

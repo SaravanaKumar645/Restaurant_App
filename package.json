@@ -27,6 +27,7 @@
     "react-toastify": "^8.1.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "8.0.0",
     "eslint-config-next": "11.1.2"
   }

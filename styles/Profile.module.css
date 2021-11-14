@@ -1,0 +1,40 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: rgb(252, 242, 223);
+}
+.container .profileBox {
+  height: max-content;
+  width: 600px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  z-index: 999;
+  flex-direction: column;
+  gap: 4ch;
+  flex-wrap: wrap;
+  position: relative;
+  color: black;
+  box-shadow: 0 0 12px rgba(85, 87, 88, 0.918);
+  background: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+  border: 2px solid gray;
+}
+.profileBox .title {
+  display: flex;
+  gap: 1ch;
+  background-color: #f4f4fb;
+  text-align: left;
+  padding: 13px;
+  font-size: 11pt;
+  color: black;
+  fill: black;
+}
+.profileBox .title svg {
+  height: 18px;
+  width: 18px;
+  cursor: pointer;
+}

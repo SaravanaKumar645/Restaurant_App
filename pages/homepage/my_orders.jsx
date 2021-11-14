@@ -1,14 +1,8 @@
-import router from "next/router";
-import { useEffect } from "react";
 import Header from "../../Components/HomeComponents/Header";
 import Orders from "../../Components/HomeComponents/Orders";
 import Head from "next/head";
+import withAuth from "../../Authentication/protectedRoutes";
 const My_Orders = () => {
-  useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      router.replace("/login_user");
-    }
-  }, []);
   return (
     <>
       <Header />
@@ -25,4 +19,4 @@ const My_Orders = () => {
   );
 };
 
-export default My_Orders;
+export default withAuth(My_Orders);

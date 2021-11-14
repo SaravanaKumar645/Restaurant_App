@@ -11,6 +11,7 @@
   background-color: #1f70db;
   height: 70px;
   width: 100%;
+  z-index: 100;
   flex-wrap: wrap;
   box-shadow: 4px 4px 10px rgb(65, 62, 62);
   border-bottom: 2px solid rgb(7, 84, 199);
